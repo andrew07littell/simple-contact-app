@@ -55,6 +55,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onSearch }) => {
         <Select value={searchType} onChange={handleTypeChange} label="Search">
           <MenuItem value={"Name"}>Name</MenuItem>
           <MenuItem value={"PhoneNumber"}>Phone</MenuItem>
+          <MenuItem value={"Tag"}>Tag</MenuItem>
         </Select>
       </FormControl>
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />

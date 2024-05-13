@@ -22,26 +22,42 @@ namespace ContactApi.Repository
             await _dbContext.Contacts.ToListAsync();
 
         public async Task<Contact> GetByIdAsync(string id) =>
-            await _dbContext.Contacts.FindAsync(id);
+            await _dbContext.Contacts.SingleOrDefaultAsync(contact => contact._id.ToString() == id);
 
         public async Task<List<Contact>> SearchByNameAsync(string name) =>
             await _dbContext.Contacts.Where(contact => contact.FirstName.Contains(name) || contact.LastName.Contains(name)).ToListAsync();
 
         public async Task<List<Contact>> SearchByPhoneNumberAsync(string phoneNumber) =>
-            await _dbContext.Contacts.Where(contact => contact.PhoneNumbers != null && contact.PhoneNumbers.Any(p => p.Number.Contains(phoneNumber))).ToListAsync();
+            await _dbContext.Contacts
+                .Where(contact => contact.PhoneNumbers.Count != 0 && contact.PhoneNumbers.Any(pn => pn.Number.Contains(phoneNumber)))
+                .ToListAsync();
+
+
+        public async Task<List<Contact>> SearchByTagAsync(string tag) =>
+            await _dbContext.Contacts
+                .Where(contact => contact.PhoneNumbers.Count != 0 && contact.PhoneNumbers.Any(pn => pn.Label.Contains(tag)))
+                .ToListAsync();
 
         public async Task UpdateAsync(string id, Contact contact)
         {
-            var existingContact = await _dbContext.Contacts.FindAsync(id);
-            if (existingContact != null)
+            var existingContact = _dbContext.Contacts.FirstOrDefault(contact => contact._id.ToString() == id);
+            if (contact.FirstName != null)
             {
                 existingContact.FirstName = contact.FirstName;
-                existingContact.LastName = contact.LastName;
-                existingContact.Email = contact.Email;
-                existingContact.PhoneNumbers = contact.PhoneNumbers;
-
-                await _dbContext.SaveChangesAsync();
             }
+            if (contact.LastName != null)
+            {
+                existingContact.LastName = contact.LastName;
+            }
+            if (contact.Email != null)
+            {
+                existingContact.Email = contact.Email;
+            }
+            if (contact.PhoneNumbers != null)
+            {
+                existingContact.PhoneNumbers = contact.PhoneNumbers;
+            }
+            _dbContext.SaveChanges();
         }
 
         public async Task CreateAsync(Contact contact)
@@ -52,7 +68,7 @@ namespace ContactApi.Repository
 
         public async Task DeleteAsync(string id)
         {
-            var contact = await _dbContext.Contacts.FindAsync(id);
+            var contact = _dbContext.Contacts.FirstOrDefault(contact => contact._id.ToString() == id);
             if (contact != null)
             {
                 _dbContext.Contacts.Remove(contact);

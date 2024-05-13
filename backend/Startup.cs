@@ -30,13 +30,12 @@ namespace ContactApi
             services.AddDbContext<ContactDbContext>(options =>
             {
                 options.UseMongoDB(
-                    "mongodb://localhost:27017", "ContactDatabase"
+                    "mongodb://localhost:27017", "ContactStore"
                 );
             });
 
             services.AddSwaggerGen();
-            services.Configure<ContactDatabaseSettings>(Configuration.GetSection("ContactDatabase"));
-            
+            services.Configure<ContactDatabaseSettings>(Configuration.GetSection("ContactStore"));
             services.AddScoped<ContactDbContext>();
             services.AddScoped<IContactRepository, ContactRepository>();
             services.AddScoped<IContactsService, ContactsService>();

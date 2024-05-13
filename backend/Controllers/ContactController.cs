@@ -68,6 +68,14 @@ public class ContactController : ControllerBase
         return contacts;
     }
 
+    // GET /contacts/search/phonenumber
+    [HttpGet("search/tag/{tag}")]
+    public async Task<ActionResult<List<Contact>>> SearchByTag(string tag)
+    {
+        var contacts = await _contactsService.SearchByTagAsync(tag);
+        return contacts;
+    }
+
     // PUT /contacts/{contactId}
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(string id, Contact contact)

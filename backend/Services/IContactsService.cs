@@ -10,6 +10,7 @@ namespace ContactApi.Services
         Task<Contact> GetAsync(string id);
         Task<List<Contact>> SearchByNameAsync(string name);
         Task<List<Contact>> SearchByPhoneNumberAsync(string phoneNumber);
+        Task<List<Contact>> SearchByTagAsync(string tag);
         Task UpdateAsync(string id, Contact contact);
         Task CreateAsync(Contact contact);
         Task DeleteAsync(string id);

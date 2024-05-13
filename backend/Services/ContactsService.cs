@@ -26,6 +26,9 @@ namespace ContactApi.Services
         public Task<List<Contact>> SearchByPhoneNumberAsync(string phoneNumber) =>
             _contactRepository.SearchByPhoneNumberAsync(phoneNumber);
 
+        public Task<List<Contact>> SearchByTagAsync(string tag) =>
+            _contactRepository.SearchByTagAsync(tag);
+
         public Task UpdateAsync(string id, Contact contact) =>
             _contactRepository.UpdateAsync(id, contact);
 
