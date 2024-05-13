@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
@@ -25,10 +26,18 @@ namespace ContactApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<ContactDbContext>(options =>
+            {
+                options.UseMongoDB(
+                    "mongodb://localhost:27017", "ContactDatabase"
+                );
+            });
+
             services.AddSwaggerGen();
             services.Configure<ContactDatabaseSettings>(Configuration.GetSection("ContactDatabase"));
-            services.AddScoped<ContactDbContext>();
             
+            services.AddScoped<ContactDbContext>();
             services.AddScoped<IContactRepository, ContactRepository>();
             services.AddScoped<IContactsService, ContactsService>();
             services.AddControllers();

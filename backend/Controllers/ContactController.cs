@@ -8,7 +8,7 @@ namespace ContactApiServer.Controllers;
 [Route("contacts")]
 public class ContactController : ControllerBase
 {
-    private readonly ContactsService _contactsService;
+    private readonly IContactsService _contactsService;
 
     private static readonly string[] Summaries = new[]
     {
@@ -17,7 +17,7 @@ public class ContactController : ControllerBase
 
     private readonly ILogger<ContactController> _logger;
 
-    public ContactController(ILogger<ContactController> logger, ContactsService contactsService)
+    public ContactController(ILogger<ContactController> logger, IContactsService contactsService)
     {
         _logger = logger;
         _contactsService = contactsService;
