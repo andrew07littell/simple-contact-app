@@ -1,12 +1,14 @@
 
 using ContactApi.Models;
-namespace ContactApi.Contexts;
 
 using MongoDB.Driver;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.EntityFrameworkCore.Extensions;
 
-internal class ContactDbContext : DbContext
+
+namespace ContactApi.Contexts;
+
+public class ContactDbContext : DbContext
 {
   public DbSet<Contact> Contacts { get; init; }
 

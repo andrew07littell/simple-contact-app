@@ -1,75 +1,39 @@
 using ContactApi.Models;
-using ContactApi.Contexts;
-using Microsoft.Extensions.Options;
-using MongoDB.Driver;
-using Microsoft.EntityFrameworkCore;
+using ContactApi.Repository;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace ContactApi.Services;
-
-public class ContactsService
+namespace ContactApi.Services
 {
-
-    private readonly ContactDbContext db;
-
-    public ContactsService(
-        IOptions<ContactDatabaseSettings> contactDatabaseSettings)
+    public class ContactsService : IContactsService
     {
-        var mongoClient = new MongoClient(
-            contactDatabaseSettings.Value.ConnectionString);
+        private readonly IContactRepository _contactRepository;
 
-        var mongoDatabase = mongoClient.GetDatabase(
-            contactDatabaseSettings.Value.DatabaseName);
+        public ContactsService(IContactRepository contactRepository)
+        {
+            _contactRepository = contactRepository;
+        }
 
-        db = ContactDbContext.Create(mongoDatabase, contactDatabaseSettings.Value.ContactsCollectionName);
+        public Task<List<Contact>> GetAllAsync() =>
+            _contactRepository.GetAllAsync();
+
+        public Task<Contact> GetAsync(string id) =>
+            _contactRepository.GetByIdAsync(id);
+
+        public Task<List<Contact>> SearchByNameAsync(string name) =>
+            _contactRepository.SearchByNameAsync(name);
+
+        public Task<List<Contact>> SearchByPhoneNumberAsync(string phoneNumber) =>
+            _contactRepository.SearchByPhoneNumberAsync(phoneNumber);
+
+        public Task UpdateAsync(string id, Contact contact) =>
+            _contactRepository.UpdateAsync(id, contact);
+
+        public Task CreateAsync(Contact contact) =>
+            _contactRepository.CreateAsync(contact);
+
+        public Task DeleteAsync(string id) =>
+            _contactRepository.DeleteAsync(id);
     }
 
-    public async Task<List<Contact>> GetAllAsync() =>
-        await db.Contacts.ToListAsync();
-
-    public async Task<Contact> GetAsync(string id) =>
-        await db.Contacts.SingleOrDefaultAsync(contact => contact._id.ToString() == id);
-
-
-    public async Task<List<Contact>> SearchByNameAsync(string name) =>
-         db.Contacts.Where(contact => contact.FirstName.Contains(name) || contact.LastName.Contains(name)).ToList();
-
-    public async Task<List<Contact>> SearchByPhoneNumberAsync(string phoneNumber) =>
-        db.Contacts.Where(contact => contact.PhoneNumbers != null && contact.PhoneNumbers.Any(p => p.Number.Contains(phoneNumber))).ToList();
-        
-    public async Task UpdateAsync(string id, Contact contact)
-    {
-        var existingContact = db.Contacts.FirstOrDefault(contact => contact._id.ToString() == id);
-        if (contact.FirstName != null)
-        {
-            existingContact.FirstName = contact.FirstName;
-        }
-        if (contact.LastName != null)
-        {
-            existingContact.LastName = contact.LastName;
-        }
-        if (contact.Email != null)
-        {
-            existingContact.Email = contact.Email;
-        }
-        if (contact.PhoneNumbers != null)
-        {
-            existingContact.PhoneNumbers = contact.PhoneNumbers;
-        }
-        db.SaveChanges();
-    }
-
-    public async Task CreateAsync(Contact contact)
-    {
-        db.Contacts.Add(contact);
-        db.SaveChanges();
-    }
-
-    public async Task DeleteAsync(string id)
-    {
-        var contact = db.Contacts.Single(contact => contact._id.ToString() == id);
-        if(contact != null) {
-            db.Contacts.Remove(contact);
-            db.SaveChanges();
-        }
-    }
 }
