@@ -34,6 +34,9 @@ export const fetchContacts = async (
   }
 
   const response = await axios.get<Contact[]>(BASE_URL);
+
+  console.log(response.data);
+
   return response.data;
 };
 

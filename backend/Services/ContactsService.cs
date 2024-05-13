@@ -34,7 +34,7 @@ public class ContactsService
          db.Contacts.Where(contact => contact.FirstName.Contains(name) || contact.LastName.Contains(name)).ToList();
 
     public async Task<List<Contact>> SearchByPhoneNumberAsync(string phoneNumber) =>
-        db.Contacts.Where(contact => contact.PhoneNumbers.Contains(phoneNumber)).ToList();
+        db.Contacts.Where(contact => contact.PhoneNumbers != null && contact.PhoneNumbers.Any(p => p.Number.Contains(phoneNumber))).ToList();
         
     public async Task UpdateAsync(string id, Contact contact)
     {

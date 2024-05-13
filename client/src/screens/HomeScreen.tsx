@@ -68,7 +68,9 @@ const HomeScreen: React.FC = () => {
                     primary={`${contact.firstName} ${contact.lastName}`}
                     secondary={`${
                       contact.phoneNumbers?.[0]
-                        ? formatPhoneNumber(contact.phoneNumbers[0])
+                        ? `${formatPhoneNumber(
+                            contact.phoneNumbers[0].number
+                          )} (${contact.phoneNumbers[0].label})`
                         : "No phone number"
                     }`}
                   />
