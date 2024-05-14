@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 
-import { SearchBox, Avatar, ErrorMessage } from "../components";
+import { SearchBox, Avatar, ErrorMessage, Badge } from "../components";
 import { useContactList, useDeleteContact } from "../hooks/contact";
 import { Contact } from "../types/contact";
 import { formatPhoneNumber } from "../utils/PhoneNumber";
@@ -74,6 +74,7 @@ const HomeScreen: React.FC = () => {
                         : "No phone number"
                     }`}
                   />
+                  {contact.tag && <Badge content={contact.tag} />}
                 </ListItem>
               </NavLink>
             ))

@@ -17,6 +17,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
   const [firstName, setFirstName] = useState(defaultContact?.firstName ?? "");
   const [lastName, setLastName] = useState(defaultContact?.lastName ?? "");
   const [email, setEmail] = useState(defaultContact?.email ?? "");
+  const [tag, setTag] = useState(defaultContact?.tag ?? "");
   const [phoneNumbers, setPhoneNumbers] = useState<PhoneNumber[]>(
     defaultContact?.phoneNumbers ?? []
   );
@@ -46,7 +47,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSubmit({ firstName, lastName, email, phoneNumbers });
+    onSubmit({ firstName, lastName, email, tag, phoneNumbers });
   };
 
   console.log(phoneNumbers);
@@ -72,12 +73,20 @@ const ContactForm: React.FC<ContactFormProps> = ({
             onChange={(e) => setLastName(e.target.value)}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={9}>
           <TextField
             fullWidth
             label="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <TextField
+            fullWidth
+            label="Tag"
+            value={tag}
+            onChange={(e) => setTag(e.target.value)}
           />
         </Grid>
         <Grid item xs={12}>

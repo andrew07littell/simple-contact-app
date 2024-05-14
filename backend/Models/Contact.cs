@@ -23,6 +23,8 @@ namespace ContactApi.Models {
 
         public string? Email { get; set; }
 
+        public string? Tag { get; set; }
+
         public List<PhoneNumber> PhoneNumbers { get; set; }
     }
 }

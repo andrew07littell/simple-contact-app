@@ -35,7 +35,7 @@ namespace ContactApi.Repository
 
         public async Task<List<Contact>> SearchByTagAsync(string tag) =>
             await _dbContext.Contacts
-                .Where(contact => contact.PhoneNumbers.Count != 0 && contact.PhoneNumbers.Any(pn => pn.Label.Contains(tag)))
+                .Where(contact => contact.Tag.Contains(tag))
                 .ToListAsync();
 
         public async Task UpdateAsync(string id, Contact contact)
